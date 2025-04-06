@@ -12,15 +12,21 @@ function Login() {
   });
 
   const handleChange = (e) => {
-    setCredentials({...credentials, [e.target.name]: e.target.value});
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Si no es "Admin", validar que el correo contenga "@"
+    // Validar que si no es "Admin" se ingrese un correo válido
     if (credentials.email !== "Admin" && !credentials.email.includes('@')) {
       alert("Ingrese un correo válido o 'Admin' para login de administrador.");
+      return;
+    }
+
+    // Validar que la contraseña tenga al menos 8 caracteres
+    if (credentials.password.length < 8) {
+      alert('La contraseña debe tener al menos 8 caracteres');
       return;
     }
 
@@ -42,13 +48,12 @@ function Login() {
       });
       const data = await response.json();
       if (response.ok) {
-        // Se usa el email como nombre de usuario en este ejemplo
         login(credentials.email, false);
         setCredentials({ email: "", password: "" });
         alert("Inicio de sesión exitoso");
         navigate("/");
       } else {
-        alert("Error: " + data.detail);
+        alert("Error: " + JSON.stringify(data.detail));
       }
     } catch (error) {
       console.error("Error en login:", error);
@@ -78,6 +83,7 @@ function Login() {
             value={credentials.password} 
             onChange={handleChange} 
             required 
+            minLength="8"
           />
         </div>
         <button type="submit">Iniciar Sesión</button>

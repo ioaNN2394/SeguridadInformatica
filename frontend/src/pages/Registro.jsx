@@ -7,7 +7,6 @@ function Registro() {
     apellido: '',
     email: '',
     password: '',
-    confirmPassword: '',
   });
 
   const handleChange = (e) => {
@@ -16,24 +15,24 @@ function Registro() {
 
   const handleRegistro = async (e) => {
     e.preventDefault();
-    // Validar que las contraseñas coincidan
-    if (user.password !== user.confirmPassword) {
-      alert('Las contraseñas no coinciden');
+
+    // Validar que la contraseña tenga al menos 8 caracteres
+    if (user.password.length < 8) {
+      alert('La contraseña debe tener al menos 8 caracteres');
       return;
     }
+
     try {
       const response = await fetch('http://127.0.0.1:8000/auth/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
       });
       const data = await response.json();
       if (response.ok) {
         alert('Registro exitoso');
       } else {
-        alert('Error: ' + data.detail);
+        alert('Error: ' + JSON.stringify(data.detail));
       }
     } catch (error) {
       console.error('Error en registro:', error);
@@ -59,11 +58,14 @@ function Registro() {
         </div>
         <div>
           <label>Contraseña: </label>
-          <input type="password" name="password" value={user.password} onChange={handleChange} required />
-        </div>
-        <div>
-          <label>Confirmar Contraseña: </label>
-          <input type="password" name="confirmPassword" value={user.confirmPassword} onChange={handleChange} required />
+          <input
+            type="password"
+            name="password"
+            value={user.password}
+            onChange={handleChange}
+            required
+            minLength="8"
+          />
         </div>
         <button type="submit">Registrarse</button>
       </form>
