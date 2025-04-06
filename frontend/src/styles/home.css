@@ -1,0 +1,16 @@
+.home-section {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .home-section h1,
+  .home-section h2 {
+    color: #2C3E50;
+  }
+  
+  .home-section p {
+    color: #34495e;
+    line-height: 1.6;
+  }
+  
